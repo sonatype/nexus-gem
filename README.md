@@ -1,11 +1,26 @@
+# gem command extension for nexus gem repository server
+
+* [![Build Status](https://secure.travis-ci.org/sonatype/nexus-gem.png)](http://travis-ci.org/sonatype/nexus-gem)
+
+see
+* <nexus.sonatype.org>
+* <github.com/sonatype/nexus-ruby-support> for older nexus releases (before version 2.11.0)
+* <github.com/sonatype/nexus-oss/plugins/rubygem> for current nexus-ruby-plugin
+
+# installing
+
+    gem install nexus
+
+# usage
+
+    gem nexus my.gem
+
+then the command will prompt for the url, username and password. for further
+info on how to deploy to more then one repo, keep the credentials file on different file system location (like on an external device) or encrypt the credentials file altogether with password based encryption:
+
+    gem help nexus
+
 # test, build, deploy, push #
-
-there a two ways of doing things. both result in **identical** gems !!
-
-maven runs the test for some jruby versions in both 1.8 and 1.9 mode. i.e.
-it is a build CI of jruby.
-
-## the ruby way ##
 
 prepare the dependencies
 
@@ -23,19 +38,15 @@ build and push gem to rubygems.org
 install the gem into your local rubgems repository
 
     gem install -l nexus-*.gem
-	
-## the maven way ##
 
-    mvn -Ppush
-	
-this will run the tests, package the gem and pushed it to rubygems.org
+# contributing #
 
-the test run with some jruby versions in both 1.8 as well 1.9 mode.
+1. fork it
+2. create your feature branch (`git checkout -b my-new-feature`)
+3. commit your changes (`git commit -am 'Added some feature'`)
+4. push to the branch (`git push origin my-new-feature`)
+5. create new pull request
 
-    mvn install
+# meta-fu #
 
-will install the packed gem artifact into the local repository.
-
-install the gem into your local rubgems repository
-
-    gem install -l target/nexus-*.gem
+enjoy :) 
