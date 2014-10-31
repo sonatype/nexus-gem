@@ -46,13 +46,8 @@ class Gem::Commands::NexusCommand < Gem::AbstractCommand
       options[ :nexus_secrets ] = false
     end
 
-    # backward compatibility
-    add_option( '--password', 'DEPRECATED' ) do  |value, options|
-      options[ :nexus_prompt_all ] = value
-    end
-
     add_option( '--[no-]prompt',
-                'always prompt for the credentials.' ) do |value, options|
+                'always prompt for the credentials. this is helpful to reset your username/password for a specific host.' ) do |value, options|
       options[ :nexus_prompt_all ] = value
     end
 

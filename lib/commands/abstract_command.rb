@@ -19,11 +19,6 @@ class Gem::AbstractCommand < Gem::Command
       options[ :nexus_clear ] = value
     end
 
-    # backward compatibility
-    add_option( '--nexus-clear', 'DEPRECATED' ) do |value, options|
-      options[ :nexus_clear ] = value
-    end
-
     add_option( '--nexus-config FILE',
                 "File location of nexus config to use.\n                                     default #{Nexus::Config.default_file}" ) do |value, options|
       options[ :nexus_config ] = File.expand_path( value )
