@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.files += Dir['lib/**/*.rb']
   s.files += Dir['test/**/*.rb']
 
-  s.homepage = 'https://github.com/sonatype/nexus-ruby-support/tree/master/nexus-gem'
+  s.homepage = 'https://github.com/sonatype/nexus-gem'
   s.post_install_message = %q{
 ========================================================================
 
