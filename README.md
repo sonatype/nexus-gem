@@ -3,9 +3,9 @@
 * [![Build Status](https://secure.travis-ci.org/sonatype/nexus-gem.png)](http://travis-ci.org/sonatype/nexus-gem)
 
 see
-* <nexus.sonatype.org>
-* <github.com/sonatype/nexus-ruby-support> for older nexus releases (before version 2.11.0)
-* <github.com/sonatype/nexus-oss/plugins/rubygem> for current nexus-ruby-plugin
+* http://www.sonatype.org/nexus/
+* https://github.com/sonatype/nexus-oss/tree/nexus-2.11.x/plugins/rubygem for current nexus-ruby-plugin
+* https://github.com/sonatype/nexus-ruby-support for older nexus releases (before version 2.11.0)
 
 # installing
 
