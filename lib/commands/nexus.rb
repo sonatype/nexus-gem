@@ -55,7 +55,7 @@ class Gem::Commands::NexusCommand < Gem::AbstractCommand
                 'encrypt/decrypt the credentials with a master password.' ) do |value, options|
       options[ :nexus_encrypt ] = value
     end
-    
+
   end
 
   def execute
@@ -94,7 +94,11 @@ class Gem::Commands::NexusCommand < Gem::AbstractCommand
     else
       setup
       # if there is no gemname and no options which then fail with send_gem
-      send_gem
+      if send_gem
+        exit(0)
+      else
+        exit(1)
+      end
     end
   end
 
@@ -120,5 +124,6 @@ class Gem::Commands::NexusCommand < Gem::AbstractCommand
     else
       say response.message
     end
+    response.code == "201"
   end
 end
