@@ -218,7 +218,7 @@ class AbstractCommandTest < CommandTest
       should "say that we configured the url" do
         @command.configure_url
         assert_received(@command) { |command| command.say("Enter the URL of the rubygems repository on a Nexus server") }
-        assert_received(@command) { |command| command.say("The Nexus URL has been stored in pkg/configsign") }
+        assert_received(@command) { |command| command.say("The Nexus URL has been stored in pkg/configurl") }
         assert_equal( @command.config.url, "http://url" )
       end
     end

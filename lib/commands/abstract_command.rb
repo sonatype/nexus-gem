@@ -40,7 +40,7 @@ class Gem::AbstractCommand < Gem::Command
     if URI.parse( "#{url}" ).host != nil
       config.url = url
 
-      say 'The Nexus URL has been stored in #{config}'
+      say "The Nexus URL has been stored in #{config}"
     else
       raise 'no URL given'
     end
