@@ -192,7 +192,7 @@ class AbstractCommandTest < CommandTest
       should "say that we signed in" do
         @command.sign_in
         assert_received(@command) { |command| command.say("Enter your Nexus credentials") }
-        assert_received(@command) { |command| command.say("Your Nexus credentials has been stored in pkg/configsign") }
+        assert_received(@command) { |command| command.say("Your Nexus credentials have been stored in pkg/configsign") }
         assert_equal( @command.config.authorization, 
                       "Basic dXNlcm5hbWU6cGFzc3dvcmQgMDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODk=" )
       end
@@ -218,7 +218,7 @@ class AbstractCommandTest < CommandTest
       should "say that we configured the url" do
         @command.configure_url
         assert_received(@command) { |command| command.say("Enter the URL of the rubygems repository on a Nexus server") }
-        assert_received(@command) { |command| command.say("The Nexus URL has been stored in ~/.gem/nexus") }
+        assert_received(@command) { |command| command.say("The Nexus URL has been stored in pkg/configurl") }
         assert_equal( @command.config.url, "http://url" )
       end
     end

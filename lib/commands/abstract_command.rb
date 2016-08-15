@@ -40,7 +40,7 @@ class Gem::AbstractCommand < Gem::Command
     if URI.parse( "#{url}" ).host != nil
       config.url = url
 
-      say 'The Nexus URL has been stored in ~/.gem/nexus'
+      say "The Nexus URL has been stored in #{config}"
     else
       raise 'no URL given'
     end
@@ -77,9 +77,9 @@ class Gem::AbstractCommand < Gem::Command
     unless config.always_prompt?
       config.authorization = @authorization
       if @authorization
-        say "Your Nexus credentials has been stored in #{config}"
+        say "Your Nexus credentials have been stored in #{config}"
       else
-        say "Your Nexus credentials has been deleted from #{config}"
+        say "Your Nexus credentials have been deleted from #{config}"
       end
     end
   end
