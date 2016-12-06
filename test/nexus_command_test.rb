@@ -329,24 +329,36 @@ class NexusCommandTest < CommandTest
       context "non-successful push" do
         should "say something went wrong - maybe (re)deployment is not allowed when receiving a 400 reponse" do
           stub_request(:put, @url).to_return(:status => 400)
-          @exit_code = @command.send_gem
-          msg = "something went wrong - maybe (re)deployment is not allowed"
-          assert_received(@command) { |command| command.say(msg) }
-          assert_equal 1, @exit_code
+          begin
+            @command.send_gem
+          rescue SystemExit => e
+            @exit_code = e.status
+            msg = "something went wrong - maybe (re)deployment is not allowed"
+            assert_received(@command) { |command| command.say(msg) }
+            assert_equal 1, @exit_code
+          end
         end
 
         should "say unauthorized when receiving a 401 response" do
           stub_request(:put, @url).to_return(:status => 401)
-          @exit_code = @command.send_gem
-          assert_received(@command) { |command| command.say("Unauthorized") }
-          assert_equal 1, @exit_code
+          begin
+            @command.send_gem
+          rescue SystemExit => e
+            @exit_code = e.status
+            assert_received(@command) { |command| command.say("Unauthorized") }
+            assert_equal 1, @exit_code
+          end
         end
 
         should "say something went wrong when receiving a 500 response" do
           stub_request(:put, @url).to_return(:status => 500)
-          @exit_code = @command.send_gem
-          assert_received(@command) { |command| command.say("something went wrong") }
-          assert_equal 1, @exit_code
+          begin
+            @exit_code = @command.send_gem
+          rescue SystemExit => e
+            @exit_code = e.status
+            assert_received(@command) { |command| command.say("something went wrong") }
+            assert_equal 1, @exit_code
+          end
         end
       end
     end

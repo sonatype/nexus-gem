@@ -121,7 +121,11 @@ class Gem::Commands::NexusCommand < Gem::AbstractCommand
     else
       say response.message
     end
-    exit_code = 1 if !response.kind_of? Net::HTTPSuccess
+
+    if !response.kind_of? Net::HTTPSuccess
+      exit_code = 1
+      exit exit_code
+    end
     exit_code
   end
 end
