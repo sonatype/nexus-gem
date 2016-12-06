@@ -47,7 +47,7 @@ class NexusCommandTest < CommandTest
       @command.options[ :nexus_encrypt ] = true
       mock(@command).ask( "Enter your Nexus encryption credentials (no prompt)" ) { 'behappy' }
       @command.execute
-      assert_equal( File.read( @with + ".config" ), 
+      assert_equal( File.read( @with + ".config" ),
                     File.read( @from + ".config" ) )
       assert_equal( File.read( @with + ".secrets" ) != File.read( @from + ".secrets" ), true )
 
@@ -80,13 +80,13 @@ class NexusCommandTest < CommandTest
       config_path = File.join( 'pkg', 'encconfig_prompt')
       File.open( config_path, 'w') do |f|
         h = { :url => 'http://example.com',
-          :authorization => 'something', 
+          :authorization => 'something',
           :token => 'pe/ty1I5sl7qD5drdsSXOBi0peRYOqdhhvRXJBjzzNY=' }
         f.write h.to_yaml
       end
       stub(@command).options { {:nexus_config => config_path } }
       stub(@command).ask_for_password { "behappy" }
-      
+
       @command.setup
       assert_equal @command.config.encrypted?, true
     end
@@ -109,7 +109,7 @@ class NexusCommandTest < CommandTest
       @command.options[ :nexus_encrypt ] = false
       mock(@command).ask( "Enter your Nexus encryption credentials (no prompt)" ) { 'behappy' }
       @command.execute
-      assert_equal( File.read( @with + ".config" ), 
+      assert_equal( File.read( @with + ".config" ),
                     File.read( @from + ".config" ) )
       assert_equal( File.read( @with + ".secrets" ) != File.read( @from + ".secrets" ), true )
 
@@ -304,14 +304,14 @@ class NexusCommandTest < CommandTest
           obj
         end
         stub_request(:put, @url).to_return(:status => 201)
-        
-        @command.send_gem
+        @exit_code = @command.send_gem
       end
 
       should "say push was successful" do
         assert_received(@command) { |command| command.say("Uploading gem to Nexus...") }
         # due to webmock there is no status message
         assert_received(@command) { |command| command.say("") }
+        assert_equal 0, @exit_code
       end
 
       should "put to api" do
@@ -321,9 +321,33 @@ class NexusCommandTest < CommandTest
         assert_requested(:put, @url,
                          :body => @gem_binary,
                          :headers => {
-                           'Authorization' => 'key', 
+                           'Authorization' => 'key',
                            'Content-Type' => 'application/octet-stream'
                          })
+      end
+
+      context "non-successful push" do
+        should "say something went wrong - maybe (re)deployment is not allowed when receiving a 400 reponse" do
+          stub_request(:put, @url).to_return(:status => 400)
+          @exit_code = @command.send_gem
+          msg = "something went wrong - maybe (re)deployment is not allowed"
+          assert_received(@command) { |command| command.say(msg) }
+          assert_equal 1, @exit_code
+        end
+
+        should "say unauthorized when receiving a 401 response" do
+          stub_request(:put, @url).to_return(:status => 401)
+          @exit_code = @command.send_gem
+          assert_received(@command) { |command| command.say("Unauthorized") }
+          assert_equal 1, @exit_code
+        end
+
+        should "say something went wrong when receiving a 500 response" do
+          stub_request(:put, @url).to_return(:status => 500)
+          @exit_code = @command.send_gem
+          assert_received(@command) { |command| command.say("something went wrong") }
+          assert_equal 1, @exit_code
+        end
       end
     end
   end

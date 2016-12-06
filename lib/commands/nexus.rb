@@ -55,7 +55,7 @@ class Gem::Commands::NexusCommand < Gem::AbstractCommand
                 'encrypt/decrypt the credentials with a master password.' ) do |value, options|
       options[ :nexus_encrypt ] = value
     end
-    
+
   end
 
   def execute
@@ -110,15 +110,18 @@ class Gem::Commands::NexusCommand < Gem::AbstractCommand
       request.add_field("Authorization", authorization.strip) if authorization
     end
 
+    exit_code = 0
     case response.code
-    when "401"
-      say "Unauthorized"
     when "400"
       say "something went wrong - maybe (re)deployment is not allowed"
+    when "401"
+      say "Unauthorized"
     when "500"
       say "something went wrong"
     else
       say response.message
     end
+    exit_code = 1 if !response.kind_of? Net::HTTPSuccess
+    exit_code
   end
 end
