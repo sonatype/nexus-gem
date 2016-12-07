@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
     gem nexus          publish your gems onto Nexus server
 
     nbundle            a bundler fork with mirror support. for bundler before 1.5.0
-                       
+
 add a mirror with:
 
     bundle config mirror.http://rubygems.org http://localhost:8081/nexus/content/repositories/rubygems.org
@@ -49,4 +49,5 @@ for bundler before 1.5.0 use 'nbundle' instead of 'bundle' to use the mirror
   # to use a version which works
   s.add_development_dependency('activesupport', "~> 4.0.0")
   s.add_development_dependency('webmock', "~> 1.8", "< 1.16")
+  s.add_development_dependency('addressable',  '~> 2.4.0')
 end
