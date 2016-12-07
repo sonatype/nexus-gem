@@ -110,7 +110,6 @@ class Gem::Commands::NexusCommand < Gem::AbstractCommand
       request.add_field("Authorization", authorization.strip) if authorization
     end
 
-    exit_code = 0
     case response.code
     when "400"
       say "something went wrong - maybe (re)deployment is not allowed"
@@ -123,9 +122,7 @@ class Gem::Commands::NexusCommand < Gem::AbstractCommand
     end
 
     if !response.kind_of? Net::HTTPSuccess
-      exit_code = 1
-      exit exit_code
+      exit 1
     end
-    exit_code
   end
 end

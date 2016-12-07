@@ -304,14 +304,13 @@ class NexusCommandTest < CommandTest
           obj
         end
         stub_request(:put, @url).to_return(:status => 201)
-        @exit_code = @command.send_gem
+        @command.send_gem
       end
 
       should "say push was successful" do
         assert_received(@command) { |command| command.say("Uploading gem to Nexus...") }
         # due to webmock there is no status message
         assert_received(@command) { |command| command.say("") }
-        assert_equal 0, @exit_code
       end
 
       should "put to api" do
