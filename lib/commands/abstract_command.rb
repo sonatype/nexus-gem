@@ -23,6 +23,11 @@ class Gem::AbstractCommand < Gem::Command
                 "File location of nexus config to use.\n                                     default #{Nexus::Config.default_file}" ) do |value, options|
       options[ :nexus_config ] = File.expand_path( value )
     end
+
+    add_option( '--ignore-ssl-errors',
+                "No check certificate." ) do |value, options|
+      options[ :ssl_verify_mode ] = OpenSSL::SSL::VERIFY_NONE
+    end
   end
 
   def url
@@ -109,6 +114,8 @@ class Gem::AbstractCommand < Gem::Command
 
     if url.scheme == 'https'
       http.use_ssl = true
+      http.verify_mode =
+        options[ :ssl_verify_mode ] || config.ssl_verify_mode || OpenSSL::SSL::VERIFY_PAIR
     end
     
     #Because sometimes our gems are huge and our people are on vpns
