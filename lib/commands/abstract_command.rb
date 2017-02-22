@@ -115,7 +115,7 @@ class Gem::AbstractCommand < Gem::Command
     if url.scheme == 'https'
       http.use_ssl = true
       http.verify_mode =
-        options[ :ssl_verify_mode ] || config.ssl_verify_mode || OpenSSL::SSL::VERIFY_PAIR
+        options[ :ssl_verify_mode ] || config.ssl_verify_mode || OpenSSL::SSL::VERIFY_PEER
     end
     
     #Because sometimes our gems are huge and our people are on vpns
