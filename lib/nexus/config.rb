@@ -190,6 +190,10 @@ module Nexus
       @conf.store
     end
 
+    def ssl_verify_mode
+      @conf[ :ssl_verify_mode, @repo ]
+    end
+
     def to_s
       config.file
     end

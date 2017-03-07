@@ -222,5 +222,27 @@ class AbstractCommandTest < CommandTest
         assert_equal( @command.config.url, "http://url" )
       end
     end
+
+    context "SSL verification" do
+      setup do
+        @url = "https://url"
+        @connection = Net::HTTP.new("host", 443)
+        stub(@connection).request
+        stub(Net::HTTP).new { @connection }
+        @command.config.url = @url
+      end
+
+      should "disable SSL verification" do
+        stub(@command.config).ssl_verify_mode { OpenSSL::SSL::VERIFY_NONE }
+        stub(Gem.configuration).verbose { 0 }
+        @command.make_request(:put, "gems/gem")
+        assert_equal( @connection.verify_mode, OpenSSL::SSL::VERIFY_NONE )
+      end
+
+      should "verify SSL" do
+        @command.make_request(:put, "gems/gem")
+        assert_equal( @connection.verify_mode, OpenSSL::SSL::VERIFY_PEER )
+      end
+    end
   end
 end
