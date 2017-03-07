@@ -9,7 +9,7 @@ class Gem::Commands::NexusCommand < Gem::AbstractCommand
   end
 
   def usage
-    "#{program_name} GEM"
+    "#{program_name} GEM [GEM [...]]"
   end
 
   def list_repos
@@ -59,13 +59,13 @@ class Gem::Commands::NexusCommand < Gem::AbstractCommand
   end
 
   def execute
-    name = get_one_gem_name rescue nil
-    if( name && ( options[ :nexus_all_repos ] != nil ||
+    names = get_all_gem_names rescue nil
+    if( names && ( options[ :nexus_all_repos ] != nil ||
                   options[ :nexus_clear_all ] != nil ||
                   options[ :nexus_prompt_all ] != nil ||
                   options[ :nexus_encrypt ] != nil ||
                   options[ :nexus_secrets ] != nil ) )
-      warn "given gemfile #{name} get ignored due to the options used"
+      warn "given gemfile(s) #{names.join(' ')} get ignored due to the options used"
     end
 
     if options[ :nexus_all_repos ]
@@ -99,30 +99,32 @@ class Gem::Commands::NexusCommand < Gem::AbstractCommand
   end
 
   def send_gem
-    say "Uploading gem to Nexus..."
+    gems = get_all_gem_names
 
-    path = get_one_gem_name
+    say "Uploading #{gems.size} gem#{'s' if gems.size != 1} to Nexus..."
 
-    response = make_request(:put, "gems/#{File.basename(path)}") do |request|
-      request.body = Gem.read_binary(path)
-      request.add_field("Content-Length", request.body.size)
-      request.add_field("Content-Type", "application/octet-stream")
-      request.add_field("Authorization", authorization.strip) if authorization
-    end
+    gems.each do |path|
+      response = make_request(:put, "gems/#{File.basename(path)}") do |request|
+        request.body = Gem.read_binary(path)
+        request.add_field("Content-Length", request.body.size)
+        request.add_field("Content-Type", "application/octet-stream")
+        request.add_field("Authorization", authorization.strip) if authorization
+      end
 
-    case response.code
-    when "400"
-      say "something went wrong - maybe (re)deployment is not allowed"
-    when "401"
-      say "Unauthorized"
-    when "500"
-      say "something went wrong"
-    else
-      say response.message
-    end
+      case response.code
+      when "400"
+        say "something went wrong - maybe (re)deployment is not allowed"
+      when "401"
+        say "Unauthorized"
+      when "500"
+        say "something went wrong"
+      else
+        say "#{response.message} #{path.split(/\//).last}"
+      end
 
-    if !response.kind_of? Net::HTTPSuccess
-      exit 1
+      if !response.kind_of? Net::HTTPSuccess
+        exit 1
+      end
     end
   end
 end
