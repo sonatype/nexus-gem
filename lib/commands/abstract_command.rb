@@ -19,6 +19,16 @@ class Gem::AbstractCommand < Gem::Command
       options[ :nexus_clear ] = value
     end
 
+    add_option( '--url URL',
+                'URL of the rubygems repository on a Nexus server' ) do |value, options|
+      options[ :nexus_url ] = value
+    end
+
+    add_option( '--credential USER:PASS',
+                'Enter your Nexus credentials in "Username:Password" format' ) do |value, options|
+      options[ :nexus_credential ] = value
+    end
+
     add_option( '--nexus-config FILE',
                 "File location of nexus config to use.\n                                     default #{Nexus::Config.default_file}" ) do |value, options|
       options[ :nexus_config ] = File.expand_path( value )
@@ -38,9 +48,13 @@ class Gem::AbstractCommand < Gem::Command
   end
 
   def configure_url
-    say "Enter the URL of the rubygems repository on a Nexus server"
-
-    url = ask("URL: ")
+    url =
+      if options[ :nexus_url ]
+        options[ :nexus_url ]
+      else
+        say "Enter the URL of the rubygems repository on a Nexus server"
+        ask("URL: ")
+      end
 
     if URI.parse( "#{url}" ).host != nil
       config.url = url
@@ -70,12 +84,17 @@ class Gem::AbstractCommand < Gem::Command
   end
 
   def sign_in
-    say "Enter your Nexus credentials"
-    username = ask("Username: ")
-    password = ask_for_password("Password: ")
+    token =
+      if options[ :nexus_credential ]
+        options[ :nexus_credential ]
+      else
+        say "Enter your Nexus credentials"
+        username = ask("Username: ")
+        password = ask_for_password("Password: ")
+        "#{username}:#{password}"
+      end
 
     # mimic strict_encode64 which is not there on ruby1.8
-    token = "#{username}:#{password}"
     auth = "Basic #{Base64.encode64(token).gsub(/\s+/, '')}"
     @authorization = token == ':' ? nil : auth
      
