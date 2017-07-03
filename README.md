@@ -15,8 +15,13 @@ see
 
     gem nexus my.gem
 
-then the command will prompt for the url, username and password. for further
-info on how to deploy to more then one repo, keep the credentials file on different file system location (like on an external device) or encrypt the credentials file altogether with password based encryption:
+then the command will prompt for the url, username and password. 
+
+or you can specify `--url URL` and `--credential USER:PASS` to skip first prompt.
+
+    gem nexus --url http://localhost:8081/nexus/content/repositories/gems-internal --credential "your-account:${YOUR_PASS}" my.gem
+
+for further info on how to deploy to more then one repo, keep the credentials file on different file system location (like on an external device) or encrypt the credentials file altogether with password based encryption:
 
     gem help nexus
 
