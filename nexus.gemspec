@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('shoulda', "~> 3.1")
   s.add_development_dependency('rr', "~> 1.1")
   # to use a version which works
-  s.add_development_dependency('activesupport', "4.0.13")
+  s.add_development_dependency('activesupport', "4.1.11")
   s.add_development_dependency('webmock', "~> 1.8", "< 1.16")
   s.add_development_dependency('addressable',  '~> 2.4')
 end

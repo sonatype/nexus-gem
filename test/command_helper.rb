@@ -5,7 +5,7 @@ require 'shoulda'
 # for some reasons the refute_predicate is missing when executing
 # via jruby-1.7.4
 module ActiveSupport
-  class TestCase < ::MiniTest::Unit::TestCase
+  class TestCase < ::MiniTest::Test
     def refute_predicate
     end
   end

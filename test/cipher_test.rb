@@ -3,7 +3,7 @@ require 'shoulda'
 require 'fileutils'
 require 'nexus/cipher'
 
-class ConfigTest < ::MiniTest::Unit::TestCase
+class ConfigTest < ::MiniTest::Test
   include ShouldaContextLoadable 
   
   context 'no token' do
